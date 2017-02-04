@@ -53,6 +53,10 @@ def ReadUserViewCSV():
     user_view_count_df.columns = user_view_count_df.columns.map(lambda str_date:datetime.datetime.strptime(str_date, "%Y-%m-%d %H:%M:%S"))
     return user_view_count_df
 
+#读取Arima的预测数据
+def ReadArimaPayCountCSV():
+    arima_pay_count_df = pd.read_csv("./data/dataset/dataset/arima/result", encoding='UTF-8', index_col=0)
+    return arima_pay_count_df;
 ###=======================================================================================================================================================
 def getShopPayTimeSeries(user_pay_counts, shop_id, date_range):
      return user_pay_counts.ix[shop_id][date_range[0]:(date_range[1] + datetime.timedelta(hours=23))]
