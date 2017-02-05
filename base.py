@@ -210,6 +210,10 @@ def evaluation_tm(y_test, train_mean):
     n = y_test.shape[0]
     return np.sum(np.abs(y_test - train_mean) / (y_test + train_mean)) / n
 
+def getTestCount(user_pay_counts, id, start, end):
+    df = countShopPayTimePeriods(user_pay_counts, id, date_range=[start, end],
+                                 time_range=[datetime.timedelta(hours=0), datetime.timedelta(hours=23)])
+    return df['count'];
 #清理userpaycount
 def WipeInvalidUserPayCount(user_pay_count):
     nonzero_user_pay_count = user_pay_count[user_pay_count['count'] != 0];
