@@ -18,6 +18,7 @@ predict_pay_count <- function(id)
 counts_frame <- data.frame()
 for(id in 1:2000)
 {
+  print(id)
   counts = predict_pay_count(id)
   counts_frame <- rbind(counts_frame, counts)
   
