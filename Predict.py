@@ -81,15 +81,20 @@ def initTrainArimasData(type, shop_open_dates, user_pay_counts, start_time, end_
             arima_df.to_csv("./data/dataset/dataset/arima/" + str(id), index=False, encoding='UTF-8')
 
 def predictArimas(type):
+    predict_df = 0;
     if type == 'predict':
-        return pd.read_csv("./data/dataset/dataset/predict/arima/result", encoding='UTF-8', index_col=0)
+        predict_df = pd.read_csv("./data/dataset/dataset/predict/arima_prediction.txt", sep='\t', encoding='UTF-8', index_col=0)
     else:
-        return  base.ReadArimaPayCountCSV()
+        predict_df = pd.read_csv("./data/dataset/dataset/validation/arima_prediction.txt", sep='\t', encoding='UTF-8', index_col=0)
+    predict_df = predict_df.astype(np.int)
+    predict_df = predict_df.applymap(lambda x : 0 if x < 0 else x);
+
+    return predict_df;
 
 #读取evaluations
 ###=======================================================================================================================================================
 def ReadEvaluationsCSV(type):
-    path = "./data/dataset/dataset/"
+    path = "./data/dataset/dataset/validation/"
     if type == 'holiday_mean':
         path = path + 'holiday_mean_evaluation.txt'
     elif type == 'arima':
