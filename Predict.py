@@ -101,3 +101,12 @@ def ReadEvaluationsCSV(type):
         path = path + 'arima_evaluation.txt'
 
     return  pd.read_csv(path, sep='\t', encoding='UTF-8', parse_dates=True, index_col=0)
+
+def ReadHolidayMeanPredictCSV():
+    return pd.read_csv( "./data/dataset/dataset/predict/holiday_mean_prediction.txt", sep='\t', header=None, encoding='UTF-8', index_col=0)
+
+def FixFinalPredict(predict_df):
+    predict_df = predict_df.astype(np.int)
+    predict_df = predict_df.applymap(lambda x : 0 if x < 0 else x);
+    predict_df.fillna(0);
+    return predict_df;

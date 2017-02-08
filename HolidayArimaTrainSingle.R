@@ -9,7 +9,6 @@ predict_pay_count <- function(id, daytype, time)
   
   model = auto.arima(pay_count_ts)
   pay_forecast <- forecast.Arima(model, h = time, level = c(99.5))
-  print('end')
   real_pay = pay_forecast$mean
   
   return(real_pay)
