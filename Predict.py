@@ -77,15 +77,20 @@ def initTrainArimasData(type, shop_open_dates, user_pay_counts, start_time, end_
         arima_df = initTrainSingleArimaData(id, shop_open_dates, user_pay_counts, start_time, end_time)
         if type == 'predict':
             arima_df.to_csv("./data/dataset/dataset/predict/arima/" + str(id), index=False, encoding='UTF-8')
-        else:
+        elif type == 'validation':
+            arima_df.to_csv("./data/dataset/dataset/validation/arima/" + str(id), index=False, encoding='UTF-8')
+        elif type == 'test':
             arima_df.to_csv("./data/dataset/dataset/arima/" + str(id), index=False, encoding='UTF-8')
 
 def predictArimas(type):
     predict_df = 0;
     if type == 'predict':
         predict_df = pd.read_csv("./data/dataset/dataset/predict/arima_prediction.txt", sep='\t', encoding='UTF-8', index_col=0)
-    else:
+    elif type == 'validation':
         predict_df = pd.read_csv("./data/dataset/dataset/validation/arima_prediction.txt", sep='\t', encoding='UTF-8', index_col=0)
+    elif type == 'test':
+        predict_df = pd.read_csv("./data/dataset/dataset/arima_prediction.txt", sep='\t', encoding='UTF-8', index_col=0)
+
     predict_df = predict_df.astype(np.int)
     predict_df = predict_df.applymap(lambda x : 0 if x < 0 else x);
 

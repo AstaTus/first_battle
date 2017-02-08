@@ -27,6 +27,5 @@ for(id in 1:2000)
 colnames(counts_frame) <- c(1:14)
 
 
-write.csv(counts_frame, )
 write.table(counts_frame, "./data/dataset/dataset/predict/arima_prediction.txt", sep="\t") 
 

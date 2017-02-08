@@ -80,11 +80,11 @@ def getShopPayTimePeriods(user_pay_counts, shop_id, date_range, time_range):
             print(periods)
     return periods;
 
-def getShopViewTimeSeries(user_view_count_df, shop_id, date_range):
-     return user_view_count_df.ix[shop_id][date_range[0]:(date_range[1] + datetime.timedelta(hours=23))]
+def getShopViewTimeSeries(user_view_counts, shop_id, date_range):
+     return user_view_counts.ix[shop_id][date_range[0]:(date_range[1] + datetime.timedelta(hours=23))]
 
-def countShopViewTimePeriods(shop_id, date_range, time_range):
-    ts = getShopViewTimeSeries(shop_id, date_range)
+def countShopViewTimePeriods(user_view_counts, shop_id, date_range, time_range):
+    ts = getShopViewTimeSeries(user_view_counts, shop_id, date_range)
     period_start = pd.date_range(start=date_range[0], end=date_range[1],freq='D')
     period_end = pd.date_range(start=date_range[0], end=date_range[1],freq='D')
     period_start = period_start + time_range[0];
@@ -224,3 +224,22 @@ def WipeInvalidUserPayCount(user_pay_count):
 
     return valid_df;
 ###=======================================================================================================================================================
+def getHolidayPayCount(id, day_type, shop_open_dates, user_pay_counts, calenders, start_time, end_time):
+    open_time = shop_open_dates.loc[id]['date'];
+    if open_time > start_time:
+        start_time = open_time
+    df = countShopPayTimePeriods(user_pay_counts, id,
+                                      date_range=[start_time, end_time], time_range=[datetime.timedelta(hours=0), datetime.timedelta(hours=23)])
+
+    df['holiday'] = calenders.loc[df.index.strftime('%Y-%m-%d')]['daytype'].values
+
+
+    temp_df = df[df['holiday'] == day_type];
+
+    return temp_df
+
+###==========================================================================================================================================================
+def getShopViewCount(user_view_counts, id, start, end):
+    df = countShopViewTimePeriods(user_view_counts, id, date_range=[start, end], time_range=[datetime.timedelta(hours=0), datetime.timedelta(hours=23)]);
+
+    return df;
