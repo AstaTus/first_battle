@@ -24,6 +24,9 @@ def ReadShopInfoCSV():
                                'comment_cnt','shop_level','cate_1_name','cate_2_name','cate_3_name'], index_col=0, converters={'cate_3_name':np.str})
     return shop_infos;
 
+def ReadProcessShopInfoCSV():
+    shop_infos = pd.read_csv("./data/dataset/dataset/process_shop_info.txt", sep='\t',encoding='UTF-8', index_col=0)
+    return shop_infos;
 
 ##读取城市名称对照表
 def ReadCityNameCSV():
@@ -33,6 +36,12 @@ def ReadCityNameCSV():
 #读取休假表
 def ReadCalendarCSV():
     calendar = pd.read_csv('./data/dataset/dataset/calendar.txt', sep='\t', encoding='UTF-8', index_col=0, parse_dates=True)
+    calendar.index = calendar.index.format()
+    return calendar;
+
+#读取weekCirlce休假表
+def ReadWeekCalendarCSV():
+    calendar = pd.read_csv('./data/dataset/dataset/week_circle_calendar.txt', sep='\t', encoding='UTF-8', index_col=0, parse_dates=True)
     calendar.index = calendar.index.format()
     return calendar;
 
@@ -204,7 +213,11 @@ def std_count(df, last):
 ###=======================================================================================================================================================
 def evaluation(y_test, y_pred):
     n = y_test.shape[0]
-    return np.sum(np.abs(y_test - y_pred) / (y_test + y_pred)) / n
+    denominators = y_test + y_pred
+    members = y_test - y_pred
+    valid_denominators = denominators[denominators != 0]
+    valid_member = members[denominators != 0]
+    return np.sum(np.abs(valid_member) / valid_denominators) / n
 
 def evaluation_tm(y_test, train_mean):
     n = y_test.shape[0]
